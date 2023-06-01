@@ -12,10 +12,13 @@ const api = (() => {
                 return response.json();
             })
             .then(response => {
-                dom.showWeatherData(response);
+                setTimeout(() => { dom.removeLoading() }, 500);
+                setTimeout(() => { dom.showWeatherData(response) }, 500);
+
             })
             .catch((e) => {
-                dom.showWeatherData(e);
+                setTimeout(() => { dom.removeLoading() }, 500);
+                setTimeout(() => { dom.showWeatherData(e) }, 500);
             })
     }
 
