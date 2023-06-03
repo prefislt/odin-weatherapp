@@ -12,13 +12,18 @@ const api = (() => {
                 return response.json();
             })
             .then(response => {
-                setTimeout(() => { dom.removeLoading() }, 500);
-                setTimeout(() => { dom.showWeatherData(response) }, 500);
+                setTimeout(() => { dom.showWeatherData(response) }, 500); // simulate loading delay
 
             })
             .catch((e) => {
-                setTimeout(() => { dom.removeLoading() }, 500);
-                setTimeout(() => { dom.showWeatherData(e) }, 500);
+                setTimeout(() => {
+                    if (!location) {
+                        dom.renderError("Please enter location name")
+                    } else {
+                        dom.showWeatherData(e)
+                    }
+
+                }, 500);
             })
     }
 
