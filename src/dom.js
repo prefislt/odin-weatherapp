@@ -3,14 +3,21 @@ import '@fortawesome/fontawesome-free/js/solid'
 import '@fortawesome/fontawesome-free/js/regular'
 import '@fortawesome/fontawesome-free/js/brands'
 import api from './api.js';
+import handle from './handle.js';
 
 const dom = (() => {
 
     document.querySelector("body").innerHTML = /*html*/`
-    <div  id="content" class="flex mt-6 items-center flex-col h-full">
-        <div  id="inputs" class="flex flex-row">
-            <input type="text" id="locationInput" class="shadow appearance-none border rounded w-36 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-            <button id="locationSubmit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">OK</button>
+    <div id="content" class="flex mt-6 items-center flex-col h-full">
+        <div id="inputs" class="flex flex-row gap-4">
+            <div class="flex flex-row gap-0">
+                <input type="text" placeholder="ex. Paris" id="locationInput" class="shadow appearance-none border rounded-l w-36 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                <button id="locationSubmit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-3 rounded-r">OK</button>
+            </div> 
+            <div id="unitSelectors" class="flex flex-row">
+                <button id="selectC" class="bg-blue-300 hover:bg-blue-500 active:bg-blue-700  text-white font-bold py-2 px-4 rounded-l ease-in-out duration-100">°C</button>
+                <button id="selectF" class="bg-blue-300 hover:bg-blue-500 active:bg-blue-700 text-white font-bold py-2 px-4 rounded-r ease-in-out duration-100">°F</button>
+            </div>
         </div>
         <div id="output" class="flex flex-col items-center m-4 p-6 w-80 border-2 rounded-lg shadow-lg ease-in-out duration-500">
             
@@ -18,19 +25,36 @@ const dom = (() => {
     </div>
     `;
 
+    handle.enterInput();
+    handle.unitSelect();
+
     document.querySelector("#locationSubmit").addEventListener("click", async () => {
         let location = document.querySelector("#locationInput").value;
 
+        localStorage.setItem("location", location);
+        console.log(localStorage.getItem("location"));
         api.getWeatherData(location);
     })
 
-    function renderData(json) {
+    function renderData(json, unit) {
+
+        let temp, windSpeed;
+
+        if (unit === "C") {
+            temp = `${json.current.temp_c} °C`;
+            windSpeed = `${json.current.wind_kph} km/h`;
+        } else {
+            temp = `${json.current.temp_f} °F`;
+            windSpeed = `${json.current.wind_mph} mph`;
+        }
+
+
         document.querySelector("#output").innerHTML = /*html*/`
             <div id="locationCondition" class="flex justify-center items-center w-16 aspect-square"><img id="locationConditionImg" src="${json.current.condition.icon}" alt="${json.current.condition.text}"></div>
             <div id="locationName" class="font-bold text-xl">${json.location.name}</div>
             <div id="locationRegion" class="font-semibold text-xs">${json.location.region}</div>
-            <div id="locationTemp" class="font-bold text-6xl">${json.current.temp_c} °C</div>
-            <div id="locationWind" class="font-bold text-xl"><i class="rotate-${json.current.wind_dir} fa-solid fa-arrow-up"></i> <i class='fas fa-wind'></i> ${json.current.wind_kph} km/h</div>
+            <div id="locationTemp" class="font-bold text-6xl">${temp}</div>
+            <div id="locationWind" class="font-bold text-xl"><i class="rotate-${json.current.wind_dir} fa-solid fa-arrow-up"></i> <i class='fas fa-wind'></i> ${windSpeed}</div>
         `;
     }
 
@@ -59,7 +83,7 @@ const dom = (() => {
 
     function showWeatherData(json) {
         if (!json.statusText) {
-            renderData(json);
+            renderData(json, localStorage.getItem("unit"));
         } else {
             renderError(json.statusText);
         }
