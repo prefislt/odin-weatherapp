@@ -7,19 +7,22 @@ import handle from './handle.js';
 
 const dom = (() => {
 
+    document.querySelector("body").classList.add("flex", "flex-col", "h-[100dvh]", "items-center", "justify-center");
+
     document.querySelector("body").innerHTML = /*html*/`
-    <div id="content" class="flex mt-6 items-center flex-col h-full">
+    <div id="content" class="flex flex-col mt-6 items-center justify-center h-screen max-w-lg ">
+        <p class="mb-4 text-transparent bg-clip-text bg-gradient-to-br font-extrabold text-2xl from-blue-300 to-blue-600"><span class="uppercase text-xs">mini</span> Weather App</p>
         <div id="inputs" class="flex flex-row gap-4">
             <div class="flex flex-row gap-0">
-                <input type="text" placeholder="Vilnius" id="locationInput" class="shadow appearance-none border rounded-l w-36 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                <button id="locationSubmit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-3 rounded-r">OK</button>
+                <input type="text" placeholder="Vilnius" id="locationInput" class="shadow appearance-none border-blue-500 border-2 border-r-0 rounded-l w-36 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                <button id="locationSubmit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-3 rounded-r shadow ease-in-out duration-100">OK</button>
             </div> 
             <div id="unitSelectors" class="flex flex-row">
                 <button id="selectC" class="bg-blue-300 hover:bg-blue-600 active:bg-blue-700 text-white font-bold py-2 px-4 rounded-l ease-in-out duration-100">°C</button>
                 <button id="selectF" class="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold py-2 px-4 rounded-r ease-in-out duration-100">°F</button>
             </div>
         </div>
-        <div id="output" class="flex flex-col items-center m-4 p-6 w-80 border-2 rounded-lg shadow-lg ease-in-out duration-500">
+        <div id="output" class="flex flex-col items-center m-4 p-6 w-full border rounded shadow ease-in-out duration-500">
             
         </div>
     </div>
