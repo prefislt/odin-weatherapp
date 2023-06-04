@@ -11,12 +11,12 @@ const dom = (() => {
     <div id="content" class="flex mt-6 items-center flex-col h-full">
         <div id="inputs" class="flex flex-row gap-4">
             <div class="flex flex-row gap-0">
-                <input type="text" placeholder="ex. Paris" id="locationInput" class="shadow appearance-none border rounded-l w-36 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                <input type="text" placeholder="Vilnius" id="locationInput" class="shadow appearance-none border rounded-l w-36 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                 <button id="locationSubmit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-3 rounded-r">OK</button>
             </div> 
             <div id="unitSelectors" class="flex flex-row">
-                <button id="selectC" class="bg-blue-300 hover:bg-blue-500 active:bg-blue-700  text-white font-bold py-2 px-4 rounded-l ease-in-out duration-100">°C</button>
-                <button id="selectF" class="bg-blue-300 hover:bg-blue-500 active:bg-blue-700 text-white font-bold py-2 px-4 rounded-r ease-in-out duration-100">°F</button>
+                <button id="selectC" class="bg-blue-300 hover:bg-blue-600 active:bg-blue-700 text-white font-bold py-2 px-4 rounded-l ease-in-out duration-100">°C</button>
+                <button id="selectF" class="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold py-2 px-4 rounded-r ease-in-out duration-100">°F</button>
             </div>
         </div>
         <div id="output" class="flex flex-col items-center m-4 p-6 w-80 border-2 rounded-lg shadow-lg ease-in-out duration-500">
@@ -31,10 +31,29 @@ const dom = (() => {
     document.querySelector("#locationSubmit").addEventListener("click", async () => {
         let location = document.querySelector("#locationInput").value;
 
-        localStorage.setItem("location", location);
-        console.log(localStorage.getItem("location"));
-        api.getWeatherData(location);
+        if (!location) {
+            api.getWeatherData(localStorage.getItem("location"));
+        } else {
+            api.getWeatherData(location);
+        }
+
     })
+
+    function markUnit() {
+        if (localStorage.getItem("unit") === "C") {
+            document.querySelector("#selectC").classList.add("underline", "bg-blue-500");
+            document.querySelector("#selectC").classList.remove("bg-blue-300");
+
+            document.querySelector("#selectF").classList.remove("underline", "bg-blue-500");
+            document.querySelector("#selectF").classList.add("bg-blue-300");
+        } else {
+            document.querySelector("#selectF").classList.add("underline", "bg-blue-500");
+            document.querySelector("#selectF").classList.remove("bg-blue-300");
+
+            document.querySelector("#selectC").classList.remove("underline", "bg-blue-500");
+            document.querySelector("#selectC").classList.add("bg-blue-300");
+        }
+    }
 
     function renderData(json, unit) {
 
@@ -93,7 +112,8 @@ const dom = (() => {
         renderData,
         renderError,
         displayLoading,
-        showWeatherData
+        showWeatherData,
+        markUnit
     }
 })();
 

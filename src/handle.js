@@ -3,6 +3,12 @@ import dom from './dom.js';
 
 const handle = (() => {
 
+    function startUp() {
+        storage();
+        dom.markUnit();
+        api.getWeatherData(localStorage.getItem("location"));
+    }
+
     function storage() {
         if (!localStorage.getItem("unit")) {
             localStorage.setItem("unit", "C");
@@ -10,7 +16,6 @@ const handle = (() => {
 
         if (!localStorage.getItem("location")) {
             localStorage.setItem("location", "Vilnius");
-            console.log("nustatyta Vilnius");
         }
     }
 
@@ -26,20 +31,27 @@ const handle = (() => {
     function unitSelect() {
 
         document.querySelector("#selectC").addEventListener("click", () => {
-            localStorage.setItem("unit", "C");
-            api.getWeatherData(localStorage.getItem("location"));
+            if (localStorage.getItem("location") && localStorage.getItem("unit") !== "C") {
+                localStorage.setItem("unit", "C");
+                dom.markUnit();
+                api.getWeatherData(localStorage.getItem("location"));
+            }
         })
 
         document.querySelector("#selectF").addEventListener("click", () => {
-            localStorage.setItem("unit", "F");
-            api.getWeatherData(localStorage.getItem("location"));
+            if (localStorage.getItem("location") && localStorage.getItem("unit") !== "F") {
+                localStorage.setItem("unit", "F");
+                dom.markUnit();
+                api.getWeatherData(localStorage.getItem("location"));
+            }
         })
     }
 
     return {
         enterInput,
         unitSelect,
-        storage
+        storage,
+        startUp
     }
 
 })();

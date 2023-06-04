@@ -12,18 +12,13 @@ const api = (() => {
                 return response.json();
             })
             .then(response => {
+                localStorage.setItem("location", response.location.name);
+                document.querySelector("#locationInput").setAttribute("placeholder", response.location.name);
                 setTimeout(() => { dom.showWeatherData(response) }, 500); // simulate loading delay
-
             })
             .catch((e) => {
-                setTimeout(() => {
-                    if (!location) {
-                        dom.renderError("Please enter location name")
-                    } else {
-                        dom.showWeatherData(e)
-                    }
-
-                }, 500);
+                setTimeout(() => { dom.renderError("Something wrong Mr. Stark") }, 500);
+                console.log(e);
             })
     }
 
