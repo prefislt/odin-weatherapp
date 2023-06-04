@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = {
     mode: "development",
@@ -10,7 +11,9 @@ module.exports = {
         clean: true,
     },
     optimization: {
-        usedExports: true, // <- remove unused function
+        usedExports: true,
+        minimize: true,
+        minimizer: [new TerserPlugin()],
     },
     devServer: {
         static: './dist',

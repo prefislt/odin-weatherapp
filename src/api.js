@@ -17,8 +17,7 @@ const api = (() => {
                 setTimeout(() => { dom.showWeatherData(response) }, 500); // simulate loading delay
             })
             .catch((e) => {
-                setTimeout(() => { dom.renderError("Something wrong Mr. Stark") }, 500);
-                console.log(e);
+                setTimeout(() => { dom.showWeatherData(e) }, 500);
             })
     }
 
